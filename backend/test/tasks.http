@@ -1,0 +1,78 @@
+
+@baseUrl = http://localhost:3000
+
+
+### GET / - Entrega index.html mediante ruta Express
+GET {{baseUrl}}/
+Accept: text/html
+
+### GET /assets/css/app.css - Entrega recurso estático
+GET {{baseUrl}}/assets/css/app.css
+Accept: text/css
+
+### GET /api/tasks - Tareas completas
+GET {{baseUrl}}/api/tasks
+Accept: application/json
+
+### GET /api/tasks/1 - Una tarea
+GET {{baseUrl}}/api/tasks/2
+Accept: application/json
+
+### GET /api/tasks/999 - 404 y JSON
+GET {{baseUrl}}/api/tasks/999
+Accept: application/json
+
+### GET /api/tasks?status=TODO - Coincidencias por estado
+GET {{baseUrl}}/api/tasks?status=DONE&project=TaskFlow
+Accept: application/json
+
+### POST /api/tasks válido - 201 y tarea creada
+POST {{baseUrl}}/api/tasks
+Content-Type: application/json
+
+{
+  "title": "Agregar mas rutas",
+  "description": "Falta agregar mas rutas para put y delete",
+  "status": "TODO"
+}
+
+### POST /api/tasks vacío - 400 y JSON
+POST {{baseUrl}}/api/tasks
+Content-Type: application/json
+
+{}
+
+### PUT /api/tasks/1  201 y JSON
+PUT {{baseUrl}}/api/tasks/1
+Content-Type: application/json
+
+{
+  "title": "Cambiar tarea", 
+  "status": "DONE", 
+  "description": "Cambiando una tarea"
+}
+
+### GET /api/tasks/1 - Una tarea
+GET {{baseUrl}}/api/tasks/1
+Accept: application/json
+
+### DELETE /api/tasks/1 - Una tarea
+DELETE {{baseUrl}}/api/tasks/1
+
+### GET /api/tasks/1 - Una tarea
+GET {{baseUrl}}/api/tasks?status=TODO&project=TaskFlow&sort=title
+Accept: application/json
+
+### GET /api/tasks/stats - Totales correctos
+GET {{baseUrl}}/api/tasks/stats
+Accept: application/json
+
+
+### PUT /api/tasks/1  400 y JSON
+PUT {{baseUrl}}/api/tasks/1
+Content-Type: application/json
+
+{
+  "title": "Cambiar tarea", 
+  "description": "Cambiando una tarea"
+}

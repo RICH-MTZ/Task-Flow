@@ -1,0 +1,220 @@
+import js from '@eslint/js';
+import globals from 'globals';
+import { defineConfig } from 'eslint/config';
+
+export default defineConfig([
+  {
+    files: ['**/*.{js,mjs,cjs}'],
+    plugins: { js },
+    extends: ['js/recommended'],
+    languageOptions: {
+      globals: {
+        ...globals.browser,
+        ...globals.node,
+        ...globals.es2021,
+      },
+      ecmaVersion: 2022,
+      sourceType: 'module',
+    },
+    rules: {
+      // ===== ERRORES CRÍTICOS (previenen bugs reales) =====
+      'no-undef': 'error',
+      'no-unreachable': 'error',
+      'no-constant-condition': 'error',
+      'no-duplicate-imports': 'error',
+      'no-new-native-nonconstructor': 'error',
+      'no-obj-calls': 'error',
+      'no-setter-return': 'error',
+      'no-unused-private-class-members': 'error',
+      'require-atomic-updates': 'error',
+      'no-async-promise-executor': 'error',
+      'no-await-in-loop': 'warn',
+      'no-promise-executor-return': 'error',
+
+      // ===== FORZAR BUENAS PRÁCTICAS MODERNAS =====
+      'no-var': 'error',
+      'prefer-const': 'error',
+      'prefer-template': 'error',
+      'prefer-destructuring': ['error', { array: true, object: true }],
+      'prefer-rest-params': 'error',
+      'prefer-spread': 'error',
+      'prefer-numeric-literals': 'error',
+      'prefer-regex-literals': 'error',
+      'object-shorthand': 'error',
+      'arrow-body-style': ['error', 'as-needed'],
+
+      // ===== EVITAR ERRORES COMUNES DE PRINCIPIANTES =====
+      eqeqeq: ['error', 'always', { null: 'ignore' }],
+      'no-eq-null': 'error',
+      'no-implicit-coercion': 'error',
+      'no-implicit-globals': 'error',
+      'no-multi-spaces': 'error',
+      'no-multi-str': 'error',
+      'no-negated-condition': 'warn',
+      'no-nested-ternary': 'error',
+      'no-new-wrappers': 'error',
+      'no-proto': 'error',
+      'no-script-url': 'error',
+      'no-self-compare': 'error',
+      'no-sequences': 'error',
+      'no-throw-literal': 'error',
+      'no-unmodified-loop-condition': 'error',
+      'no-unneeded-ternary': 'error',
+      'no-useless-call': 'error',
+      'no-useless-catch': 'error',
+      'no-useless-concat': 'error',
+      'no-useless-constructor': 'error',
+      'no-useless-escape': 'error',
+      'no-useless-rename': 'error',
+      'no-useless-return': 'error',
+      'no-void': 'error',
+      'no-with': 'error',
+      radix: 'error',
+      'require-await': 'warn',
+      yoda: 'error',
+
+      // ===== VARIABLES NO USADAS (mejorado: permite _var) =====
+      'no-unused-vars': [
+        'error',
+        {
+          argsIgnorePattern: '^_',
+          varsIgnorePattern: '^_',
+          caughtErrorsIgnorePattern: '^_',
+          destructuredArrayIgnorePattern: '^_',
+        },
+      ],
+
+      // ===== CONSISTENCIA DE ESTILO (código uniforme) =====
+      semi: ['error', 'always'],
+      'no-extra-semi': 'error',
+      quotes: ['error', 'single', { avoidEscape: true }],
+      indent: ['error', 2, { SwitchCase: 1 }],
+      'brace-style': ['error', '1tbs', { allowSingleLine: true }],
+      'comma-dangle': ['error', 'always-multiline'],
+      'object-curly-spacing': ['error', 'always'],
+      'array-bracket-spacing': ['error', 'never'],
+      'keyword-spacing': ['error', { before: true, after: true }],
+      'space-before-blocks': ['error', 'always'],
+      'space-before-function-paren': [
+        'error',
+        { anonymous: 'always', named: 'never', asyncArrow: 'always' },
+      ],
+      'space-in-parens': ['error', 'never'],
+      'space-infix-ops': 'error',
+      'space-unary-ops': ['error', { words: true, nonwords: false }],
+      'spaced-comment': ['error', 'always', { exceptions: ['-', '+'] }],
+      'switch-colon-spacing': ['error', { after: true, before: false }],
+      'template-tag-spacing': ['error', 'never'],
+      'comma-spacing': ['error', { before: false, after: true }],
+      'comma-style': ['error', 'last'],
+      'computed-property-spacing': ['error', 'never'],
+      'func-call-spacing': ['error', 'never'],
+      'function-call-argument-newline': ['error', 'consistent'],
+      'function-paren-newline': ['error', 'multiline-arguments'],
+      'implicit-arrow-linebreak': ['error', 'beside'],
+      'multiline-ternary': ['error', 'always-multiline'],
+      'new-parens': 'error',
+      'newline-per-chained-call': ['error', { ignoreChainWithDepth: 3 }],
+      'no-array-constructor': 'error',
+      'no-lonely-if': 'error',
+      'no-mixed-operators': [
+        'error',
+        {
+          groups: [
+            ['+', '-', '*', '/', '%', '**'],
+            ['&', '|', '^', '~', '<<', '>>', '>>>'],
+            ['==', '!=', '===', '!==', '>', '>=', '<', '<='],
+            ['&&', '||'],
+            ['in', 'instanceof'],
+          ],
+          allowSamePrecedence: false,
+        },
+      ],
+      'no-mixed-spaces-and-tabs': 'error',
+      'no-multi-assign': ['error', { ignoreNonDeclaration: true }],
+      'no-multiple-empty-lines': ['error', { max: 1, maxEOF: 1, maxBOF: 0 }],
+      'no-tabs': 'error',
+      'no-trailing-spaces': 'error',
+      'no-whitespace-before-property': 'error',
+      'nonblock-statement-body-position': ['error', 'beside', { overrides: {} }],
+      'object-property-newline': ['error', { allowAllPropertiesOnSameLine: true }],
+      'one-var': ['error', 'never'],
+      'one-var-declaration-per-line': 'error',
+      'operator-linebreak': ['error', 'after', { overrides: { '?': 'before', ':': 'before' } }],
+      'padded-blocks': ['error', 'never'],
+      'quote-props': ['error', 'as-needed'],
+      'rest-spread-spacing': ['error', 'never'],
+      'semi-spacing': ['error', { before: false, after: true }],
+      'semi-style': ['error', 'last'],
+      'wrap-regex': 'error',
+
+      // ===== IMPORTS ORDENADOS =====
+      'sort-imports': [
+        'error',
+        {
+          ignoreCase: false,
+          ignoreDeclarationSort: true,
+          ignoreMemberSort: false,
+          memberSyntaxSortOrder: ['none', 'all', 'multiple', 'single'],
+          allowSeparatedGroups: false,
+        },
+      ],
+
+      // ===== FUNCIONES Y CLASES =====
+      'arrow-spacing': ['error', { before: true, after: true }],
+      'constructor-super': 'error',
+      'generator-star-spacing': ['error', 'before'],
+      'max-classes-per-file': ['error', 1],
+      'no-class-assign': 'error',
+      'no-constructor-return': 'error',
+      'no-dupe-class-members': 'error',
+      'no-empty-function': ['error', { allow: ['arrowFunctions', 'functions', 'methods'] }],
+      'no-empty-static-block': 'error',
+      'no-extend-native': 'error',
+      'no-new-symbol': 'error',
+      'no-restricted-globals': ['error', 'isFinite', 'isNaN'],
+      'no-this-before-super': 'error',
+      'no-useless-computed-key': 'error',
+      'prefer-arrow-callback': 'error',
+      'prefer-exponentiation-operator': 'error',
+      'require-yield': 'error',
+
+      // ===== COMPLEJIDAD (warn: avisa pero no bloquea) =====
+      'max-depth': ['warn', 4],
+      'max-lines': ['warn', 300],
+      'max-lines-per-function': ['warn', 50],
+      'max-nested-callbacks': ['warn', 3],
+      'max-params': ['warn', 4],
+      'max-statements': ['warn', 20],
+      complexity: ['warn', 10],
+
+      // ===== TU CONFIG ORIGINAL =====
+      camelcase: 'error',
+    },
+  },
+  {
+    // Tests: relajar reglas estrictas
+    files: ['**/*.test.js', '**/*.spec.js', '**/test/**/*.js', '**/__tests__/**/*.js'],
+    languageOptions: {
+      globals: {
+        ...globals.jest,
+        ...globals.mocha,
+        ...globals.node,
+      },
+    },
+    rules: {
+      'no-unused-vars': 'off',
+      'max-lines-per-function': 'off',
+      'max-statements': 'off',
+      'require-await': 'off',
+    },
+  },
+  {
+    // Archivos de config (eslint.config.js, jest.config.js, etc.)
+    files: ['*.config.js', '*.config.mjs', '.eslintrc.js', 'jest.config.js'],
+    rules: {
+      'no-undef': 'off',
+      'no-unused-vars': 'off',
+    },
+  },
+]);

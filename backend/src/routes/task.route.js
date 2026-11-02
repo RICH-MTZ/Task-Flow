@@ -1,4 +1,5 @@
 import { response, Router } from 'express';
+import { body, validationResult } from 'express-validator';
 
 const router = Router();
 
@@ -6,6 +7,19 @@ const tasks = [
   { id: 1, title: 'Configurar Node.js', status: 'DONE', project: 'TaskFlow' },
   { id: 2, title: 'Crear rutas Express', status: 'TODO', project: 'TaskFlow' },
   { id: 3, title: 'Documentar API', status: 'TODO', project: 'DASW' },
+];
+
+const validateTask = [
+    body('title').trim().notEmpty().withMessage('El titulo es obligatorio'),
+    body('status').trim().isIn(['TODO','DONE']).withMessage('El status solo permite TODO y DONE'),
+    body('project').optional().trim(),
+    (request, response, next) => {
+        const errors = validationResult(request);
+        if (!errors.isEmpty()){
+            return response.status(400).json({ errores: errors.array() });
+        }
+        next();
+    }
 ];
 
 router.get('/', (request, response) => {
@@ -63,7 +77,7 @@ router.get('/:id', (request, response) => {
   response.status(200).json(task);
 });
 
-router.post('/', (request, response) => {
+router.post('/', validateTask, (request, response) => {
     const { title, status, project = 'TaskFlow' } = request.body;
 
   if (!title?.trim() || !status?.trim()) {
@@ -86,7 +100,7 @@ router.post('/', (request, response) => {
   response.status(201).json(task);
 });
 
-router.put('/:id', (request, response) => {
+router.put('/:id', validateTask, (request, response) => {
     const id = Number(request.params.id);
 
     const index = tasks.findIndex(t => t.id === id);

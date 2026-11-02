@@ -76,3 +76,7 @@ Content-Type: application/json
   "title": "Cambiar tarea", 
   "description": "Cambiando una tarea"
 }
+
+### GET /api/tasks/stats - Totales correctos
+GET {{baseUrl}}/api/debug-error
+Accept: application/json

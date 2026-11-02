@@ -1,6 +1,12 @@
 import express from 'express';
 import path from 'node:path';
-import taskRouter from './routes/task.route.js'
+import taskRouter from './routes/task.route.js';
+//import { logger } from './middleware/logger.js';
+import morgan from 'morgan';
+import errorHandler from './middleware/error.hander.js';
+import 'dotenv/config'
+import cors from 'cors';
+import helmet from 'helmet'; 
 
 const tasks = [
   { id: 1, title: 'Configurar Node.js', status: 'DONE', project: 'TaskFlow' },
@@ -9,6 +15,14 @@ const tasks = [
 ];
 
 const app = express();
+
+app.use(helmet());
+
+app.use(cors ({
+  origin: process.env.FRONTEND_ORIGIN
+}));
+
+app.use(morgan('dev'));
 
 app.use(express.json());
 
@@ -114,5 +128,7 @@ app.use((request, response) => {
   };
   response.status(404).json(mensaje);
 });
+
+app.use(errorHandler);
 
 export default app;

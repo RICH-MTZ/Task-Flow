@@ -1,5 +1,14 @@
-import app from './app.js';
+import aplicacion from './app.js';
+import { connectDatabase } from './config/database.js';
 
-const PORT = process.env.PORT || 3000;
+//const PUERTO = process.env.PORT || 3000;
 
-app.listen(PORT, () => console.log(`TaskFlow en http://localhost:${PORT}`));
+try {
+    await connectDatabase();
+    aplicacion.listen(process.env.PORT || 3000);
+} catch (error){
+    console.error('Revisa conexion y entorno', error.message);
+    process.exitCode = 1;
+}
+
+//aplicacion.listen(PUERTO, () => console.log(`TaskFlow en http://localhost:${PUERTO}`));

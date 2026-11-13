@@ -1,22 +1,55 @@
 {
-  "name": "backend",
+  "name": "task-flow-dasw",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "src/server.js",
   "scripts": {
-    "dev": "nodemon src/server.js"
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
+    "test:coverage": "npm test -- --coverage",
+    "test:watch": "npm test -- --watch",
+    "start": "node --env-file=.env src/server.js",
+    "dev": "nodemon --env-file=.env.dev src/server.js",
+    "qa": "veonver",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix"
   },
   "keywords": [],
+  "author": "",
+  "license": "ISC",
   "type": "module",
   "dependencies": {
     "cors": "^2.8.6",
-    "dotenv": "^18.0.9",
     "express": "^5.3.0",
     "express-validator": "^7.3.2",
     "helmet": "^8.3.0",
+    "mongoose": "^9.12.1",
     "morgan": "^1.12.1"
   },
   "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "eslint": "^10.13.0",
+    "globals": "^17.13.0",
+    "jest": "^30.5.2",
     "nodemon": "^3.1.14"
+  },
+  "nodemonConfig": {
+    "ignore": [
+      "**/test/**",
+      "**/docs/**"
+    ],
+    "delay": 1500
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/urielroblesg/DASW.git",
+    "directory": "task-flow"
+  },
+  "dasw": {
+    "branch": "task-flow",
+    "instructions": {
+      "clone": "git clone https://github.com/urielroblesg/DASW.git",
+      "checkout": "cd DASW && git checkout task-flow",
+      "pull": "git pull origin task-flow"
+    }
   }
 }

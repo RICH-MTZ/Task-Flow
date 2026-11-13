@@ -1,0 +1,58 @@
+@baseUrl = http://localhost:3000/api/v1/tasks
+
+### Listar tareas
+GET {{baseUrl}}
+Accept: application/json
+
+### Filtrar tareas
+GET {{baseUrl}}?status=TODO&project=TaskFlow
+Accept: application/json
+
+### Obtener tarea existente
+GET {{baseUrl}}/1
+Accept: application/json
+
+### Obtener tarea inexistente: 404
+GET {{baseUrl}}/999
+Accept: application/json
+
+### Crear tarea: 201
+POST {{baseUrl}}
+Content-Type: application/json
+
+{
+  "title": "Agregar rutas",
+  "status": "TODO",
+  "project": "TaskFlow"
+}
+
+### Crear tarea inválida: 400
+POST {{baseUrl}}
+Content-Type: application/json
+
+{}
+
+### Actualizar tarea
+PUT {{baseUrl}}/1
+Content-Type: application/json
+
+{
+  "title": "Diseñar API REST actualizada",
+  "status": "DONE",
+  "project": "TaskFlow"
+}
+
+### Actualizar tarea inexistente: 404
+PUT {{baseUrl}}/999
+Content-Type: application/json
+
+{
+  "title": "Tarea inexistente",
+  "status": "TODO"
+}
+
+### Eliminar tarea: 204
+DELETE {{baseUrl}}/3
+
+### Eliminar tarea inexistente: 404
+DELETE {{baseUrl}}/999

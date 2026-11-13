@@ -1,0 +1,79 @@
+@baseUrl = http://localhost:3000/api/v1/auth
+
+### Registro válido: 201
+POST {{baseUrl}}/registro
+Content-Type: application/json
+
+{
+  "name": "Ana Pérez",
+  "email": "ana@example.com",
+  "password": "password123"
+}
+
+### Registro sin correo: 400
+POST {{baseUrl}}/registro
+Content-Type: application/json
+
+{
+  "name": "Luis Pérez",
+  "password": "password123"
+}
+
+### Registro con contraseña corta: 400
+POST {{baseUrl}}/registro
+Content-Type: application/json
+
+{
+  "name": "Luis Pérez",
+  "email": "luis@example.com",
+  "password": "123"
+}
+
+### Registro repetido: 409. Ejecutar después del registro válido
+POST {{baseUrl}}/registro
+Content-Type: application/json
+
+{
+  "name": "Ana Pérez",
+  "email": "ana@example.com",
+  "password": "password123"
+}
+
+### Login válido: 200. Ejecutar después del registro válido
+POST {{baseUrl}}/login
+Content-Type: application/json
+
+{
+  "email": "ana@example.com",
+  "password": "password123"
+}
+
+### Login con contraseña incorrecta: 401
+POST {{baseUrl}}/login
+Content-Type: application/json
+
+{
+  "email": "ana@example.com",
+  "password": "incorrecta123"
+}
+
+### Login con correo inexistente: 401
+POST {{baseUrl}}/login
+Content-Type: application/json
+
+{
+  "email": "nadie@example.com",
+  "password": "password123"
+}
+
+### Login con formato inválido: 400
+POST {{baseUrl}}/login
+Content-Type: application/json
+
+{
+  "email": "correo-invalido",
+  "password": "123"
+}
+
+### Logout: 200
+POST {{baseUrl}}/logout

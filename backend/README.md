@@ -1,9 +1,49 @@
-## Hábitos de Seguridad
+# TaskFlow
 
-* **Variables de entorno requeridas:** `PORT` (puerto del servidor) y `FRONTEND_ORIGIN` (URL permitida para peticiones cruzadas).
-* **Archivos excluidos del control de versiones:** `.env` no se sube al repositorio para proteger credenciales y configuraciones locales.
-* **CORS vs Autenticación:** CORS (Cross-Origin Resource Sharing) solo instruye al navegador sobre qué orígenes web están autorizados para leer la respuesta de la API. No autentica usuarios ni bloquea clientes HTTP directos como Postman o cURL.
-* **Medidas pendientes para producción:** 
-  - Implementación de HTTPS para cifrar el tráfico.
-  - Rate limiting para prevenir ataques de denegación de servicio (DDoS) o fuerza bruta.
-  - Password hashing para proteger credenciales en la base de datos.
+API educativa de tareas y autenticación organizada por capas: rutas, controladores, casos de uso, repositorios y entidades.
+
+## Instalación
+
+```bash
+npm install
+```
+
+Copiar `.env.example` como `.env.dev` y configurar:
+
+```env
+PORT=3000
+FRONTEND_ORIGIN=http://127.0.0.1:5500
+```
+
+Iniciar en desarrollo:
+
+```bash
+npm run dev
+```
+
+## Rutas
+
+### Tareas
+
+- `GET /api/v1/tasks`
+- `GET /api/v1/tasks/:id`
+- `POST /api/v1/tasks`
+- `PUT /api/v1/tasks/:id`
+- `DELETE /api/v1/tasks/:id`
+
+### Autenticación
+
+- `POST /api/v1/auth/registro`
+- `POST /api/v1/auth/login`
+- `POST /api/v1/auth/logout`
+
+## Pruebas manuales
+
+Iniciar servidor y ejecutar solicitudes desde un cliente compatible con archivos HTTP:
+
+- `test/tasks.http`
+- `test/auth.http`
+
+Los usuarios se guardan en `src/data/users.json`.
+
+> Esta práctica compara y almacena contraseñas como texto plano sólo con fines educativos. Una aplicación real debe usar hashing seguro y sesiones o tokens.

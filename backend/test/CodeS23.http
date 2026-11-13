@@ -1,0 +1,58 @@
+@baseUrl = http://localhost:3000/api/v1/tasks
+# Cuando ejecutes el POST (Punto 1), copia el "id" que te devuelva y pégalo aquí abajo:
+@taskId = 6af69e108462fb20eb7eff64
+### 1. Crear tarea: 201 (Copia el "id" de la respuesta en @taskId y toma captura en Atlas)
+POST {{baseUrl}}
+Content-Type: application/json
+
+{
+  "title": "Implementar persistencia en MongoDB Atlas",
+  "description": "Verificar que el documento sobreviva al reinicio",
+  "status": "in_progress",
+  "priority": "high"
+}
+
+### 2. Obtener tarea por ID existente: 200 (Ejecutar antes y después de reiniciar Node)
+GET {{baseUrl}}/{{taskId}}
+Accept: application/json
+
+### 3.1 PATCH válido: 200
+PATCH {{baseUrl}}/{{taskId}}
+Content-Type: application/json
+
+{
+  "title": "Titulo Random",
+  "status": "done",
+  "priority": "low"
+}
+
+### 3.2 PATCH inválido: 400 (Estado fuera del enum)
+PATCH {{baseUrl}}/{{taskId}}
+Content-Type: application/json
+
+{
+  "status": "ESTADO_INVENTADO"
+}
+
+### 3.3 DELETE tarea: 204
+DELETE {{baseUrl}}/{{taskId}}
+
+### 3.4 GET posterior al DELETE: 404
+GET {{baseUrl}}/{{taskId}}
+Accept: application/json
+
+### 4.1 ID con formato inválido (no es ObjectId de 24 hex): 400
+GET {{baseUrl}}/abc
+Accept: application/json
+
+### 4.2 ID con formato válido pero ausente en BD: 404
+GET {{baseUrl}}/000000000000000000000000
+Accept: application/json
+
+### 5.1 Filtro por estado válido: 200
+GET {{baseUrl}}?status=done
+Accept: application/json
+
+### 5.2 Filtro por estado inválido: 400
+GET {{baseUrl}}?status=TODO
+Accept: application/json

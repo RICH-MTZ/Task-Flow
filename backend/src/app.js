@@ -1,134 +1,62 @@
-import express from 'express';
+// Importaciones de modulos nativos y de terceros
 import path from 'node:path';
-import taskRouter from './routes/task.route.js';
-//import { logger } from './middleware/logger.js';
-import morgan from 'morgan';
-import errorHandler from './middleware/error.hander.js';
-import 'dotenv/config'
+import express from 'express';
 import cors from 'cors';
-import helmet from 'helmet'; 
+import helmet from 'helmet';
+import morgan from 'morgan';
+// Importaciones de la aplicacion (Propias)
+import enrutadorAutenticacion from './routes/autenticacion.rutas.js';
+import enrutadorTarea from './routes/tarea.rutas.js';
+import manejadorErrores from './middlewares/manejador.errores.js';
 
-const tasks = [
-  { id: 1, title: 'Configurar Node.js', status: 'DONE', project: 'TaskFlow' },
-  { id: 2, title: 'Crear rutas Express', status: 'TODO', project: 'TaskFlow' },
-  { id: 3, title: 'Documentar API', status: 'TODO', project: 'DASW' },
-];
+const aplicacion = express();
 
-const app = express();
+aplicacion.use(helmet());
 
-app.use(helmet());
-
-app.use(cors ({
-  origin: process.env.FRONTEND_ORIGIN
+aplicacion.use(cors({
+  origin: process.env.FRONTEND_ORIGIN,
 }));
 
-app.use(morgan('dev'));
+aplicacion.use(morgan('dev'));
 
-app.use(express.json());
+aplicacion.use(express.json());
 
-const publicDir = path.join(process.cwd(), 'public');
+const directorioPublico = path.join(process.cwd(), 'public');
 
-console.log(publicDir);
+aplicacion.use('/assets', express.static(path.join(directorioPublico, 'assets')));
 
-app.use('/assets', express.static(path.join(publicDir, 'assets')));
+aplicacion.use('/api/v1/auth', enrutadorAutenticacion);
+aplicacion.use('/api/v1/tasks', enrutadorTarea);
 
-app.use('/api/tasks', taskRouter);
-
-app.get('/', (request, response) => {
-  response.sendFile('index.html', {
-    root: path.join(publicDir, 'views'),
+aplicacion.get('/', (solicitud, respuesta) => {
+  respuesta.sendFile('index.html', {
+    root: path.join(directorioPublico, 'views'),
     dotfiles: 'deny',
   });
 });
 
-app.get('/api/health', (request, response) => {
-  response.json({ status: 'Ok', system: 'TaskFlow' });
+aplicacion.get('/api/health', (solicitud, respuesta) => {
+  respuesta.json({ status: 'Ok', system: 'TaskFlow' });
 });
 
-app.get('/api/info', (request, response) => {
-  const info = {
+aplicacion.get('/api/info', (solicitud, respuesta) => {
+  const informacion = {
     name : 'TaskFlow',
     version: '1.0.0',
     description: 'TaskFlow, el sistema de seguimiento de tareas y proyectos.',
   };
 
-  response.json(info);
+  respuesta.json(informacion);
 });
 
-app.get('/api/tasks', (request, response) => {
-  const { status, project } = request.query;
-
-  console.log(`Estatus solicitado: ${status ?? 'All'}`);
-  console.log(`Projecto solicitado: ${project ?? 'Default'}`);
-
-  let resultados = tasks;
-
-  if (status?.trim()) {
-    resultados = tasks.filter(t => t.status === status);
-  }
-
-  if (project?.trim()) {
-    resultados = resultados.filter(t => t.project === project);
-  }
-
-  response.json(resultados);
-});
-
-app.get('/api/tasks/stats', (request, response) => {
-  response.json({
-    total: tasks.length,
-    todo: tasks.filter(t => t.status === 'TODO').length,
-    done: tasks.filter(t => t.status === 'DONE').length,
-  });
-});
-
-app.get('/api/tasks/:id', (request, response) => {
-  const id = Number(request.params.id);
-
-  const task = tasks.find(t => t.id === id);
-
-  if (!task) {
-    return response.status(404).json({ mensaje: 'No se encontró la tarea ', id });
-  }
-
-  response.status(200).json(task);
-});
-
-//Filtrar 
-
-
-app.post('/api/tasks', (request, response) => {
-  const { title, status, project = 'TaskFlow' } = request.body;
-
-  if (!title?.trim() || !status?.trim()) {
-    return response.status(400).json({
-      mensaje: 'title y status son obligatorios',
-    });
-  }
-
-  const nextId = Math.max(...tasks.map(item => item.id), 0) + 1;
-
-  const task = {
-    id: nextId,
-    title: title.trim(),
-    status: status.trim(),
-    project,
-  };
-
-  tasks.push(task);
-
-  response.status(201).json(task);
-});
-
-
-app.use((request, response) => {
+aplicacion.use((solicitud, respuesta) => {
   const mensaje = {
     mensaje: 'Ruta no encontrada',
-    path: request.path,
+    path: solicitud.path,
   };
-  response.status(404).json(mensaje);
+  respuesta.status(404).json(mensaje);
 });
 
-app.use(errorHandler);
+aplicacion.use(manejadorErrores);
 
-export default app;
+export default aplicacion;
